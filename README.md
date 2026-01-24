@@ -1,31 +1,31 @@
 # DL-Ops Assignment 1 Results
 
 ## Q1)A) ResNet Performance on MNIST and FashionMNIST
-> **Note:** Models trained with `pretrained=False` and `USE_AMP=True`. Experiments varied by `pin_memory` and `epochs`, the best accuracy obtained has been noted among different experiment results.
+> **Note:** Models trained with `pretrained=False` and `USE_AMP=True`. Experiments varied by `pin_memory` and `epochs'; the best accuracy obtained is noted among the different experiment results.
 
 ### Dataset: MNIST
-| Batch Size | Optimizer | Learning Rate | ResNet-18 Accuracy (%) | ResNet-50 Accuracy (%) |
-| :--- | :--- | :--- | :--- | :--- |
-| 16 | SGD | 0.001 | 97.44 | 95.47 |
-| 16 | SGD | 0.0001 |77.62 |42.52 |
-| 16 | Adam | 0.001 | 99.16|98.76 |
-| 16 | Adam | 0.0001 |99.3 |99.01 |
-| 32 | SGD | 0.001 |96.21 | 95.07| 
-| 32 | SGD | 0.0001 | 63.64|33.53 |
-| 32 | Adam | 0.001 | 99.0| 98.55|
-| 32 | Adam | 0.0001 | 99.14| 98.94|
+| Batch Size | Optimizer | Learning Rate | ResNet-18 Accuracy (%) | No. of Epochs | pin memory| ResNet-50 Accuracy (%) | No. of Epochs | pin memory|
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 16 | SGD | 0.001 | 97.44 |5 | True | 97.36 |5 |True |
+| 16 | SGD | 0.0001 |77.62 |5 |False | 53.98 |5 |False |
+| 16 | Adam | 0.001 | 99.16 |3 |False | 98.91 | 5|True |
+| 16 | Adam | 0.0001 |99.3 |5 |True |99.15 |5 |True |
+| 32 | SGD | 0.001 |96.21 |5 |True | 95.07|5 |True | 
+| 32 | SGD | 0.0001 | 63.64| 5|True |40.69 | 5|True |
+| 32 | Adam | 0.001 | 99.0| 5 |False| 98.77| 5|False |
+| 32 | Adam | 0.0001 | 99.14| 5|True | 98.94|3 |True |
 
 ### Dataset: FashionMNIST
-| Batch Size | Optimizer | Learning Rate | ResNet-18 Accuracy (%) | ResNet-50 Accuracy (%) |
-| :--- | :--- | :--- | :--- | :--- |
-| 16 | SGD | 0.001 | | |
-| 16 | SGD | 0.0001 | | |
-| 16 | Adam | 0.001 | | |
-| 16 | Adam | 0.0001 | | |
-| 32 | SGD | 0.001 | | |
-| 32 | SGD | 0.0001 | | |
-| 32 | Adam | 0.001 | | |
-| 32 | Adam | 0.0001 | | |
+| Batch Size | Optimizer | Learning Rate | ResNet-18 Accuracy (%) | No. of Epochs | pin memory| ResNet-50 Accuracy (%) | No. of Epochs | pin memory|
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 16 | SGD | 0.001 | 88.01| 5 | False | | | | |
+| 16 | SGD | 0.0001 | 74.55| 5 | True | | | | |
+| 16 | Adam | 0.001 | 92.56| 5 | True | | | | |
+| 16 | Adam | 0.0001 | 92.45| 5 | True | | | | |
+| 32 | SGD | 0.001 |80.36 |5 | True | | | | |
+| 32 | SGD | 0.0001 | 69.39| 5 | False | | | | |
+| 32 | Adam | 0.001 | 92.57| 5 | False | | | | |
+| 32 | Adam | 0.0001 |92.62 | 3 | False | | | | |
 
 ---
 
@@ -42,7 +42,7 @@
 ---
 
 ## Q2) Hardware Performance Analysis (FashionMNIST)
-> **Requirement:** Comparison of CPU vs GPU performance including FLOPs. All were run for 5 epochs
+> **Requirement:** Comparison of CPU vs GPU performance, including FLOPs. All were run for 5 epochs
 
 | Compute | Batch Size | Optimizer | Learning Rate | Model | Test Accuracy (%) | Train Time (ms) | FLOPs (GFLOPs) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
