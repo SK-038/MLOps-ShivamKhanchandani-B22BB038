@@ -18,14 +18,14 @@
 ### Dataset: FashionMNIST
 | Batch Size | Optimizer | Learning Rate | ResNet-18 Accuracy (%) | No. of Epochs | pin memory| ResNet-50 Accuracy (%) | No. of Epochs | pin memory|
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 16 | SGD | 0.001 | 88.01| 5 | False | | | | |
-| 16 | SGD | 0.0001 | 74.55| 5 | True | | | | |
-| 16 | Adam | 0.001 | 92.56| 5 | True | | | | |
-| 16 | Adam | 0.0001 | 92.45| 5 | True | | | | |
-| 32 | SGD | 0.001 |80.36 |5 | True | | | | |
-| 32 | SGD | 0.0001 | 69.39| 5 | False | | | | |
-| 32 | Adam | 0.001 | 92.57| 5 | False | | | | |
-| 32 | Adam | 0.0001 |92.62 | 3 | False | | | | |
+| 16 | SGD | 0.001 | 88.01| 5 | False |87.56 |5 |False |
+| 16 | SGD | 0.0001 | 74.56| 5 | True | 74.43| 5|True |
+| 16 | Adam | 0.001 | 93.46| 5 | False | 90.05| 5 |True |
+| 16 | Adam | 0.0001 | 93.26| 5 | True |91.59 |5 |False |
+| 32 | SGD | 0.001 |80.36 |5 | True | 79.87|5 |True |
+| 32 | SGD | 0.0001 | 69.39| 5 | False | 67.32|5 |True |
+| 32 | Adam | 0.001 | 92.57| 5 | False | 91.67| 5| False|
+| 32 | Adam | 0.0001 |92.62 | 3 | False | 90.98| 5|True |
 
 ---
 
