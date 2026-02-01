@@ -6,9 +6,9 @@
 
 ## Links
 
-- **WANDB visualizations:** [View Assignment on WandB](https://wandb.ai/b22bb038-indian-institute-of-technology-jodhpur/CIFAR10_Assignment_Lab2/runs/zzpnyeob)
+- **WANDB visualizations:** [View Assignment on WandB](https://wandb.ai/b22bb038-indian-institute-of-technology-jodhpur/CIFAR10_Assignment_Lab2/reports/ML-DL-Ops-Lab-2-Worksheet-Report--VmlldzoxNTgxMTU5MQ)
 
-- **GitHub Repository:** [View Assignment on GitHub](https://github.com/SK-038/MLOps-ShivamKhanchandani-B22BB038/tree/shivam_b22bb038_lab2_worksheet)
+- **GitHub Repository:** [View Assignment on GitHub](https://github.com/SK-038/MLOps-ShivamKhanchandani-B22BB038/tree/lab_assignment_1_B22BB038)
 
 ---
 
