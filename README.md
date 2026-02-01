@@ -2,7 +2,6 @@
 
 **Name:** Shivam Khanchandani
 **Roll Number:** B22BB038
-**Email:** [Your Email Here]
 
 ## Links
 
