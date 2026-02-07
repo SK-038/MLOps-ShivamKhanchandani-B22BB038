@@ -1,0 +1,86 @@
+# DATA CONTRACT: Flash Sale Orders Stream
+# NEGOTIATION SUMMARY
+# Producer: E-commerce Platform Data Pipeline (orders-etl@shopmax.com)
+# Consumer: Marketing Real-Time Dashboard Team (mktg-dash@shopmax.com)
+
+# Agreed Terms:
+# - Real-time logical view of orders with non-negative order totals.
+# - status_code from source mapped to human-readable status enum.
+# - Any unmapped status_code (not 2,5,9) is treated as invalid and blocks the record.
+# - Hard enforcement for order_total and status validity to keep the dashboard stable during Black Friday traffic spikes.
+
+dataContractSpecification: 0.9.3
+id: urn:datacontract:shopmax:black-friday-orders
+version: 1.0.0
+
+info:
+  title: "Flash Sale Orders for Marketing Dashboard"
+  description: |
+    Real-time stream of e-commerce orders used by the Marketing Dashboard
+    to optimize advertising spend during flash sales and Black Friday events.
+    Includes order total in USD and mapped order status.
+  owner: "E-commerce Data Engineering"
+  contact:
+    name: "Orders Data Steward"
+    email: "orders-data@shopmax.com"
+    slack: "#orders-data"
+  classification: internal
+  tags: [ecommerce, orders, marketing, realtime]
+
+schema:
+  type: object
+  properties:
+    order_total_usd:
+      type: number
+      minimum: 0
+      description: "Total order amount in USD. Must be non-negative."
+      pii: false
+      # physical_mapping: o_total
+
+    status:
+      type: string
+      enum: [PAID, SHIPPED, CANCELLED]
+      description: |
+        Logical order status mapped from status_code:
+        2=PAID, 5=SHIPPED, 9=CANCELLED.
+      pii: false
+      # physical_mapping: status_code (2,5,9)
+
+  required:
+    - order_total_usd
+    - status
+
+sla:
+  freshness:
+    threshold: "1 minute"
+    description: "Orders should appear on the dashboard within 60 seconds of creation."
+  availability:
+    percentage: "99.9%"
+    description: "High availability during flash sale windows."
+  retention:
+    period: "90 days"
+    description: "Short-term retention for marketing performance analysis."
+
+quality:
+  - name: order_total_non_negative
+    type: validity
+    expression: "order_total_usd >= 0"
+    threshold: "100%"
+    enforcement: hard
+    description: "Order total must never be negative."
+
+  - name: order_status_valid_enum
+    type: validity
+    expression: "status IN ('PAID','SHIPPED','CANCELLED')"
+    threshold: "100%"
+    enforcement: hard
+    description: "Order status must be one of the allowed values."
+
+  - name: status_code_mapped_only
+    type: validity
+    expression: "status IN ('PAID','SHIPPED','CANCELLED')"
+    threshold: "100%"
+    enforcement: hard
+    description: |
+      Reject records that originate from unmapped status codes
+      (i.e., any codes other than 2, 5, or 9 in the source system).
