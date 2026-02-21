@@ -1,0 +1,35 @@
+# Match the CUDA version to the PyTorch version
+FROM pytorch/pytorch:2.2.0-cuda12.1-cudnn8-runtime
+
+# Prevent interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Setup workspace
+WORKDIR /workspace
+
+# Install essential system tools
+RUN apt-get update && apt-get install -y \
+    git \
+    wget \
+    unzip \
+    vim \
+    libgl1-mesa-glx \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+COPY train.py .
+COPY evaluate.py .
+COPY setA.pth .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 6. Create a non-root user for security (OPTIONAL)
+# I faced issue the last time so I am skipping this step
+# ARG USER_ID=1000
+# ARG GROUP_ID=1000
+# RUN addgroup --gid $GROUP_ID user
+# RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
+# USER user
+
+# 7. Default command
+CMD ["python", "evaluate.py"]
