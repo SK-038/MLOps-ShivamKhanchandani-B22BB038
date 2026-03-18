@@ -1,81 +1,54 @@
-# Assignment 3: Fine-tuning ModernBERT on GLUE MRPC
+# Assignment 4: Optimizing Transformer Translation with Ray Tune + Optuna
 
-**Name:** Shivam Khanchandani  
-**Task:** Paraphrase classification on the Microsoft Research Paraphrase Corpus (MRPC)
-
-##  Links
-
-- **GitHub Repository:** https://github.com/SK-038/MLOps-ShivamKhanchandani-B22BB038/tree/assignment-3
-- **Hugging Face Model:** https://huggingface.co/Shivam-K/ML-Ops-Assignment-3
+**Name:** [Your Name]  
+**Roll Number:** [Your Roll Number]
 
 ---
 
-##  Objective
-
-Fine-tune a pre-trained **ModernBERT** model on the **GLUE MRPC** task, evaluate validation performance, and containerize the evaluation workflow using Docker.
-
-**Evaluation Metrics:**
-- Accuracy
-- F1 score
-
-## Model and Task
-
-- **Model:** `answerdotai/ModernBERT-base` (sequence classification)
-- **Dataset:** GLUE MRPC
-- **Problem type:** Binary classification (paraphrase / not paraphrase)
-- **Why this model:** ModernBERT is a recent, highly optimized architectural update to the classic BERT model. It was chosen because it offers superior computational efficiency, better handling of longer contexts, and faster inference times while maintaining state-of-the-art accuracy on GLUE benchmark tasks.
+## 1. Objective
+The objective of this assignment is to optimize a custom PyTorch Transformer model for **English-to-Hindi** translation. By replacing fixed hyperparameters with a **Ray Tune + Optuna** search workflow, the goal is to match or exceed the baseline BLEU score in significantly fewer than 100 epochs.
 
 ---
 
-## Training Configuration
+## 2. Part 1: Baseline Execution
+The baseline was established by training the model using the original `en_to_hi.ipynb` without any modifications to the architecture or hyperparameters.
 
-| Parameter | Value |
+| Metric | Baseline Value |
 | --- | --- |
-| `output_dir` | `ModernBERT_mrpc_ft` |
-| `per_device_train_batch_size` | 32 |
-| `num_train_epochs` | 2 |
-| `learning_rate` | 8e-5 |
-| `lr_scheduler_type` | linear |
-| `optim` | `adamw_torch` |
-| `bf16` | `True` |
+| GPU | [e.g., NVIDIA RTX A5000] |
+| Total Training Time (100 epochs) | [Insert Your Time, e.g., 40 mins] |
+| Final Training Loss | [Insert Your Loss] |
+| Final BLEU Score (NLTK) | [Insert Your BLEU, e.g., 0.6347] |
 
-**Tokenizer/Config Alignment Note:**
-During training, tokenizer special tokens differed from model/generation config. Configs were aligned automatically:
-- Updated keys: `eos_token_id`, `bos_token_id`
-- Updated values: `{'eos_token_id': None, 'bos_token_id': None}`
+**Baseline Weights Saved:** `transformer_translation_final.pth`.
 
 ---
 
-## Training Progress & Evaluation Metrics
+## 3. Part 2: Refactor for Ray Tune + Optuna
 
-- Total optimization steps: **230/230**
-- Total training time: **~4m 29s**
-- Epochs completed: **2/2**
+### 2.1 Ray-Compatible Training Function
+The training loop was refactored into a `train_tune(config)` function. It initializes the model, optimizer, and loss criterion directly from the `config` dictionary provided by the tuner. Metrics are reported per epoch to allow for real-time tracking:
 
-| Epoch | Training Loss | Validation Loss | 
-| ---: | ---: | ---: |
-| 1 | 0.507908 | 0.339598 |
-| 2 | 0.263230 | 0.292411 |
 
-### Final Result (Hub Model Evaluation)
-After 2 epochs of fine-tuning ModernBERT on MRPC, the model was pulled directly from the Hugging Face Hub and re-evaluated, confirming the weights were successfully synced:
+## 3. Part 2: Refactor for Ray Tune + Optuna
+To optimize the model, 5 key hyperparameters were varied. We ensured that the `d_model` remained divisible by the chosen `num_heads` to maintain the validity of the Transformer architecture.
 
-- **Accuracy:** `0.8823529411764706` (88.23%)
-- **F1:** `0.9175257731958762` (91.75%)
+* **Learning Rate (lr):** `tune.loguniform(1e-5, 1e-3)` 
+* **Batch Size:** `tune.choice([16, 32, 64])` 
+* **Number of Attention Heads:** `4, 8` 
+* **FeedForward Dimension (d_ff):** `1024, 2048` 
+* **Dropout Rate:** `0.1 to 0.4` 
 
-These results indicate strong paraphrase detection performance, with F1 exceeding 0.90 on validation.
+### 2.3 Configuration & Best Result
+The **ASHA Scheduler** was utilized to implement early stopping, terminating underperforming trials after a grace period of 5 epochs to save computational resources.
 
----
-
-## Docker Image Build & Run Instructions
-
-The final Docker image is configured to be **Evaluation-Only** and runs automatically on startup. Because the evaluation simply fetches the publicly hosted model from the Hugging Face Hub, no private access tokens are required at runtime.
-
-**1. Build the Docker Image:**
-```bash
-docker build -t ml-ops-assignment-3:v1 .
-```  
-
-**2. Run Docker container:**
-```bash
-docker run ml-ops-assignment-3:v1
+**Best Configuration Found:** 
+```json
+{
+  "lr": 0.00012752212408379722,
+  "batch_size": 16,
+  "num_heads": 4,
+  "d_ff": 1024,
+  "dropout": 0.2810754004322514,
+  "max_epochs": 40
+}
