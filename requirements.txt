@@ -1,9 +1,0 @@
-torch
-transformers
-datasets
-accelerate
-scikit-learn
-scipy
-pandas
-numpy
-huggingface_hub
