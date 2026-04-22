@@ -128,9 +128,3 @@ The assignment was committed on a branch separate from `main`:
 ```text
 MLDLOps-Exam2026
 ```
-
-The commit responsibility is assigned only to:
-
-```text
-SK-038 <b22bb038@iitj.ac.in>
-```
