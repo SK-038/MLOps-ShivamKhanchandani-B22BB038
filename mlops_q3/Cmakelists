@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.14)
+project(sd_onnx_cpp)
+
+set(CMAKE_CXX_STANDARD 17)
+
+set(ORT_ROOT "/usr/local")
+
+include_directories(${ORT_ROOT}/include)
+link_directories(${ORT_ROOT}/lib)
+
+add_executable(sd_inference task4_cpp_inference.cpp)
+target_link_libraries(sd_inference onnxruntime)
